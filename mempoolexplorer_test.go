@@ -22,10 +22,16 @@ func TestMain_getTxDetails(t *testing.T) {
 }
 
 func TestMain_getTxDetails_Live(t *testing.T) {
-	pendingTxs := streamMemPoolTxs(createGethClient(), 100)
-	for {
+	pendingTxs := streamMemPoolTxs(createGethClient(), 10)
+	for i := 1; i < 25; i++ {
 		currentTxHash := <-pendingTxs
 		fmt.Println(currentTxHash)
 		printTxDetails(currentTxHash)
 	}
+
+	fmt.Println("Pending TXs not found on geth node:")
+	for _, txHash := range missingTxs {
+		fmt.Println(txHash.Hex())
+	}
+
 }

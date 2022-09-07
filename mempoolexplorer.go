@@ -9,6 +9,8 @@ import (
 	"log"
 )
 
+var missingTxs = make([]common.Hash, 0, 20)
+
 func main() {
 	pendingTxs := streamMemPoolTxs(createGethClient(), 5)
 	for {
@@ -35,6 +37,7 @@ func printTxDetails(txHash common.Hash) {
 	// If TX is not found, just print the error and return so the rest of the program can continue. If there's an other error then log and exit.
 	if err == ethereum.NotFound {
 		log.Println(err)
+		storeMissingTxHashes(txHash)
 		return
 	} else if err != nil {
 		log.Fatal(err)
@@ -48,4 +51,8 @@ func printTxDetails(txHash common.Hash) {
 	fmt.Println(tx.Data())                // []
 	fmt.Println(tx.To().Hex())            // 0x55fE59D8Ad77035154dDd0AD0388D09Dd4047A8e
 	fmt.Println("isPending: ", isPending) // true
+}
+
+func storeMissingTxHashes(txHash common.Hash) {
+	missingTxs = append(missingTxs, txHash)
 }

@@ -1,4 +1,4 @@
-package mempoolexplorer
+package datacollection
 
 import (
 	"context"
@@ -9,11 +9,11 @@ import (
 	"log"
 )
 
-var missingTxs = make([]common.Hash, 0, 20)
-var txs = make(map[common.Hash]*types.Transaction)
+var MissingTxs = make([]common.Hash, 0, 20)
+var Txs = make(map[common.Hash]*types.Transaction)
 
-// streamMemPoolTxHashes listens to all pending TXs that underlying ethereum node receives from incoming RPC requests and other nodes
-func streamMemPoolTxHashes(geth *gethclient.Client, bufferLength int) chan common.Hash {
+// StreamMemPoolTxHashes listens to all pending TXs that underlying ethereum node receives from incoming RPC requests and other nodes
+func StreamMemPoolTxHashes(geth *gethclient.Client, bufferLength int) chan common.Hash {
 	pendingTxs := make(chan common.Hash, bufferLength)
 	_, err := geth.SubscribePendingTransactions(context.Background(), pendingTxs)
 	if err != nil {
@@ -22,8 +22,8 @@ func streamMemPoolTxHashes(geth *gethclient.Client, bufferLength int) chan commo
 	return pendingTxs
 }
 
-func storeTxDetails(txHash common.Hash) {
-	client := createEthClient()
+func StoreTxDetails(txHash common.Hash) {
+	client := CreateEthClient()
 	tx, _, err := client.TransactionByHash(context.Background(), txHash)
 
 	// If TX is not found, print the error, store the hash and return so the rest of the program can continue.
@@ -34,9 +34,9 @@ func storeTxDetails(txHash common.Hash) {
 	} else if err != nil {
 		log.Fatal(err)
 	}
-	txs[txHash] = tx
+	Txs[txHash] = tx
 }
 
 func storeMissingTxHashes(txHash common.Hash) {
-	missingTxs = append(missingTxs, txHash)
+	MissingTxs = append(MissingTxs, txHash)
 }

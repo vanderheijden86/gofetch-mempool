@@ -4,6 +4,7 @@
 *.dll
 *.so
 *.dylib
+/cmd/main
 
 # Test binary, built with `go test -c`
 *.test
@@ -18,4 +19,5 @@
 go.work
 
 # Env files with sensitve data
-.env
+/cmd/datacollection/.env
+/cmd/websocketserver/.env

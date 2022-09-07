@@ -1,4 +1,4 @@
-package mempoolexplorer
+package datacollection
 
 import (
 	"github.com/ethereum/go-ethereum/ethclient"
@@ -12,11 +12,14 @@ import (
 var infuraKey string
 
 func init() {
-	godotenv.Load()
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file", err)
+	}
 	infuraKey = os.Getenv("INFURA_KEY")
 }
 
-func createEthClient() *ethclient.Client {
+func CreateEthClient() *ethclient.Client {
 	client, err := ethclient.Dial("https://mainnet.infura.io/v3/" + infuraKey)
 	if err != nil {
 		log.Fatal(err)
@@ -24,7 +27,7 @@ func createEthClient() *ethclient.Client {
 	return client
 }
 
-func createGethClient() *gethclient.Client {
+func CreateGethClient() *gethclient.Client {
 	rpcClient, _ := rpc.Dial("wss://mainnet.infura.io/ws/v3/" + infuraKey)
 	client := gethclient.New(rpcClient)
 	return client

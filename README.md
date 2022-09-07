@@ -1,22 +1,23 @@
 # Ethereum Mempool Explorer
 
-Golang implementation of an ethereum mempool explorer. For now it's mainly a way to gain experience with accessing 
+Golang implementation of an ethereum mempool explorer. For now it's mainly a way to gain experience with accessing
 the ethereum mempool (pending transactions), refresh my understanding of the go programming language
 and work with the go-ethereum `ethclient` and `gethclient` packages.
 
 ## Setup
 
-In the project directory, you need to place a file called `.env` in which you place your Infura key for ethereum 
-mainnet. You can rename the `example.env` file to `.env` and paste in your own key.
+In the project's `cmd/datacollection/` and `cmd/websocketserver/` directories, you need to place a file called `.
+env` in which to put your Infura key for ethereum mainnet. Easiest is to rename the `example.env` files to `.env` 
+and paste in your own key.
 
 ```bash
 INFURA_KEY=<place your INFURA key here>
 ```
 
-
 ## Running
-You run the tests in `mempoolexplorer_tests.go` to see the functionality to get the mempool TX hashes and transaction 
-details. 
+
+You run the tests in `datacollection_test.go` to see the functionality to get the mempool TX hashes and transaction
+details.
 
 ```text
 === RUN   TestMain_streamMemPoolTxs

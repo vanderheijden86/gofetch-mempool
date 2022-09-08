@@ -2,7 +2,7 @@ package main
 
 import (
 	"flag"
-	"fmt"
+	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/gorilla/websocket"
 	"github.com/vanderheijden86/mempoolexplorer/cmd/datacollection"
 	"log"
@@ -16,6 +16,8 @@ var upgrader = websocket.Upgrader{
 	WriteBufferSize: 1024,
 }
 
+var mempoolTxs = make(chan *types.Transaction, 20)
+
 func sendMempoolTxs(w http.ResponseWriter, r *http.Request) {
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
@@ -24,7 +26,8 @@ func sendMempoolTxs(w http.ResponseWriter, r *http.Request) {
 	}
 	defer conn.Close()
 
-	for _, tx := range datacollection.Txs {
+	for {
+		tx := <-mempoolTxs
 		err = conn.WriteJSON(tx)
 		if err != nil {
 			log.Println("write:", err)
@@ -34,12 +37,7 @@ func sendMempoolTxs(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	pendingTxs := datacollection.StreamMemPoolTxHashes(datacollection.CreateGethClient(), 10)
-	for i := 1; i < 25; i++ {
-		currentTxHash := <-pendingTxs
-		fmt.Println(currentTxHash)
-		datacollection.StoreTxDetails(currentTxHash)
-	}
+	go datacollection.SubscribeFullMemPoolTransactions(mempoolTxs)
 	flag.Parse()
 	log.SetFlags(0)
 	http.HandleFunc("/mempooltxs", sendMempoolTxs)

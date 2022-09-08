@@ -2,12 +2,13 @@ package datacollection
 
 import (
 	"fmt"
-	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/core/types"
 	"testing"
 )
 
 func TestDataCollection_streamMemPoolTxs(t *testing.T) {
-	pendingTxs := StreamMemPoolTxHashes(CreateGethClient(), 100)
+	clientWrapper := NewClients()
+	pendingTxs := clientWrapper.StreamMemPoolTxHashes(100)
 	for {
 		fmt.Println("Channel length: ", len(pendingTxs))
 		fmt.Println("Channel capacity: ", cap(pendingTxs))
@@ -16,21 +17,12 @@ func TestDataCollection_streamMemPoolTxs(t *testing.T) {
 	}
 }
 
-func TestDataCollection_storeTxDetails(t *testing.T) {
-	// 0xaf745220755919ee3386ca28cc207e87388841832ee4bd67d7260b06b914af85
-	StoreTxDetails(common.HexToHash("0xaf745220755919ee3386ca28cc207e87388841832ee4bd67d7260b06b914af85"))
-}
-
-func TestDataCollection_storeTxDetails_Live(t *testing.T) {
-	pendingTxs := StreamMemPoolTxHashes(CreateGethClient(), 10)
+// TODO This test runs forever due to for loop in SubscribeFullMemPoolTransactions, rethink this
+func TestDataCollection_SubscribeFullMemPoolTransactions(t *testing.T) {
+	mempoolTxs := make(chan *types.Transaction, 20)
+	SubscribeFullMemPoolTransactions(mempoolTxs)
 	for i := 1; i < 25; i++ {
-		currentTxHash := <-pendingTxs
-		fmt.Println(currentTxHash)
-		StoreTxDetails(currentTxHash)
-	}
-
-	fmt.Println(len(Txs), " stored mempool TXs found on geth node:")
-	for _, tx := range Txs {
+		tx := <-mempoolTxs
 		fmt.Println("------------------------------------------------------")
 		fmt.Println(tx.Hash().Hex())        // 0x5d49fcaa394c97ec8a9c3e7bd9e8388d420fb050a52083ca52ff24b3b65bc9c2
 		fmt.Println(tx.Value().String())    // 10000000000000000

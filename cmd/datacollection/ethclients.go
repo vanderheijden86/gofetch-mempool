@@ -11,12 +11,24 @@ import (
 
 var infuraKey string
 
+type ClientWrapper struct {
+	eth  *ethclient.Client
+	geth *gethclient.Client
+}
+
 func init() {
 	err := godotenv.Load("../../.env")
 	if err != nil {
 		log.Fatal("Error loading .env file", err)
 	}
 	infuraKey = os.Getenv("INFURA_KEY")
+}
+
+func NewClients() *ClientWrapper {
+	return &ClientWrapper{
+		CreateEthClient(),
+		CreateGethClient(),
+	}
 }
 
 func CreateEthClient() *ethclient.Client {

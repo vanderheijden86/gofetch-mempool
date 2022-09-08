@@ -29,14 +29,10 @@ func StoreTxDetails(txHash common.Hash) {
 	// If TX is not found, print the error, store the hash and return so the rest of the program can continue.
 	if err == ethereum.NotFound {
 		log.Println(err)
-		storeMissingTxHashes(txHash)
+		MissingTxs = append(MissingTxs, txHash)
 		return
 	} else if err != nil {
 		log.Fatal(err)
 	}
 	Txs[txHash] = tx
-}
-
-func storeMissingTxHashes(txHash common.Hash) {
-	MissingTxs = append(MissingTxs, txHash)
 }

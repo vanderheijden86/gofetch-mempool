@@ -6,8 +6,8 @@ and work with the go-ethereum `ethclient` and `gethclient` packages.
 
 ## Setup
 
-In the project's `cmd/datacollection/` and `cmd/websocketserver/` directories, you need to place a file called `.
-env` in which to put your Infura key for ethereum mainnet. Easiest is to rename the `example.env` files to `.env` 
+In the project's `root folder` directory, you need to place a file called `.
+env` in which to put your Infura key for ethereum mainnet. Easiest is to rename the `example.env` file to `.env` 
 and paste in your own key.
 
 ```bash

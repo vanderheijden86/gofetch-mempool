@@ -19,5 +19,4 @@
 go.work
 
 # Env files with sensitve data
-/cmd/datacollection/.env
-/cmd/websocketserver/.env
+/.env

@@ -9,7 +9,8 @@ import (
 	"os"
 )
 
-var infuraKey string
+var ethNodeHttps string
+var ethNodeWs string
 
 type ClientWrapper struct {
 	eth  *ethclient.Client
@@ -21,7 +22,8 @@ func init() {
 	if err != nil {
 		log.Fatal("Error loading .env file", err)
 	}
-	infuraKey = os.Getenv("INFURA_KEY")
+	ethNodeHttps = os.Getenv("ETH_NODE_HTTPS")
+	ethNodeWs = os.Getenv("ETH_NODE_WS")
 }
 
 func NewClients() *ClientWrapper {
@@ -32,7 +34,7 @@ func NewClients() *ClientWrapper {
 }
 
 func CreateEthClient() *ethclient.Client {
-	client, err := ethclient.Dial("https://mainnet.infura.io/v3/" + infuraKey)
+	client, err := ethclient.Dial(ethNodeHttps)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -40,7 +42,7 @@ func CreateEthClient() *ethclient.Client {
 }
 
 func CreateGethClient() *gethclient.Client {
-	rpcClient, _ := rpc.Dial("wss://mainnet.infura.io/ws/v3/" + infuraKey)
+	rpcClient, _ := rpc.Dial(ethNodeWs)
 	client := gethclient.New(rpcClient)
 	return client
 }

@@ -9,6 +9,7 @@ import (
 	"net/http"
 )
 
+// TODO put this in config file
 var addr = flag.String("addr", "localhost:8080", "http service address")
 
 var upgrader = websocket.Upgrader{

@@ -8,12 +8,13 @@ consume.
 
 ## Setup
 
-In the project's `root folder` directory, you need to place a file called `.
-env` in which to put your Infura key for ethereum mainnet. Easiest is to rename the `example.env` file to `.env`
-and paste in your own key.
+In the project's `root folder` directory, you need to place a file called `.env` in which to put the websocket and https
+URLs of your ethereum node. Easiest is to rename the`example.env`file to `.env`and paste in your own URLs. These could
+for example be URLs of a node you set up via [Infura](https://infura.io/).
 
 ```bash
-INFURA_KEY=<place your INFURA key here>
+ETH_NODE_HTTPS=<place your eth node https address here>
+ETH_NODE_WS==<place your eth node websocket address here>
 ```
 
 ## Running
@@ -21,7 +22,7 @@ INFURA_KEY=<place your INFURA key here>
 You run the [main.go](cmd/websocketserver/main.go) to start listening for mempool TXs and broadcasting them via
 websocket to `localhost:8080/mempooltxs`.
 
-You can then hook up websocat and pipe it to jq by running `websocat ws://localhost:8080/mempooltxs | jq` in your 
+You can then hook up websocat and pipe it to jq by running `websocat ws://localhost:8080/mempooltxs | jq` in your
 terminal to verify you get output like:
 
 ```json

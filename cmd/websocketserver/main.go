@@ -38,7 +38,7 @@ func sendMempoolTxs(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	go datacollection.SubscribeFullMemPoolTransactions(mempoolTxs)
+	go datacollection.SubscribeFullPendingTxs(mempoolTxs)
 	flag.Parse()
 	log.SetFlags(0)
 	http.HandleFunc("/mempooltxs", sendMempoolTxs)

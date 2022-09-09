@@ -14,7 +14,7 @@ for example be URLs of a node you set up via [Infura](https://infura.io/).
 
 ```bash
 ETH_NODE_HTTPS=<place your eth node https address here>
-ETH_NODE_WS==<place your eth node websocket address here>
+ETH_NODE_WS=<place your eth node websocket address here>
 ```
 
 ## Running

@@ -8,7 +8,7 @@ import (
 
 func TestDataCollection_streamMemPoolTxs(t *testing.T) {
 	clientWrapper := NewClients()
-	pendingTxs := clientWrapper.StreamMemPoolTxHashes(100)
+	pendingTxs := clientWrapper.SubscribePendingTxHashes(100)
 	for {
 		fmt.Println("Channel length: ", len(pendingTxs))
 		fmt.Println("Channel capacity: ", cap(pendingTxs))
@@ -17,10 +17,10 @@ func TestDataCollection_streamMemPoolTxs(t *testing.T) {
 	}
 }
 
-// TODO This test runs forever due to for loop in SubscribeFullMemPoolTransactions, rethink this
+// TODO This test runs forever due to for loop in SubscribeFullPendingTxs, rethink this
 func TestDataCollection_SubscribeFullMemPoolTransactions(t *testing.T) {
 	mempoolTxs := make(chan *types.Transaction, 20)
-	SubscribeFullMemPoolTransactions(mempoolTxs)
+	SubscribeFullPendingTxs(mempoolTxs)
 	for i := 1; i < 25; i++ {
 		tx := <-mempoolTxs
 		fmt.Println("------------------------------------------------------")

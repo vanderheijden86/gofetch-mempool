@@ -11,8 +11,9 @@ import (
 
 var MissingTxs = make([]common.Hash, 0, 20)
 
-// StreamMemPoolTxHashes listens to all pending TXs that underlying ethereum node receives from incoming RPC requests and other nodes
-func (cs *ClientWrapper) StreamMemPoolTxHashes(bufferLength int) chan common.Hash {
+// SubscribePendingTxHashes subscribes to "newPendingTransactions" events published by the Geth node.
+// Returns the hash for all transactions that are added to the pending state and are signed with a key that is available in the node.
+func (cs *ClientWrapper) SubscribePendingTxHashes(bufferLength int) chan common.Hash {
 	pendingTxHashes := make(chan common.Hash, bufferLength)
 	_, err := cs.geth.SubscribePendingTransactions(context.Background(), pendingTxHashes)
 	if err != nil {
@@ -21,6 +22,7 @@ func (cs *ClientWrapper) StreamMemPoolTxHashes(bufferLength int) chan common.Has
 	return pendingTxHashes
 }
 
+// getFullTx returns the transaction with the given txHash. If the transaction isn't found, it adds the txHash to MissingTxs.
 func (cs *ClientWrapper) getFullTx(txHash common.Hash) *types.Transaction {
 
 	tx, _, err := cs.eth.TransactionByHash(context.Background(), txHash)
@@ -36,9 +38,10 @@ func (cs *ClientWrapper) getFullTx(txHash common.Hash) *types.Transaction {
 	return tx
 }
 
-func SubscribeFullMemPoolTransactions(c chan *types.Transaction) {
+// SubscribeFullPendingTxs subscribes to the nodes pendingTransactions, providing the full transactions (not just the hash).
+func SubscribeFullPendingTxs(c chan *types.Transaction) {
 	clientWrapper := NewClients()
-	pendingTxHashes := clientWrapper.StreamMemPoolTxHashes(10)
+	pendingTxHashes := clientWrapper.SubscribePendingTxHashes(10)
 	for {
 		currentTxHash := <-pendingTxHashes
 		fmt.Println(currentTxHash)

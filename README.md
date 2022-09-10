@@ -17,7 +17,7 @@ ETH_NODE_WS=<place your eth node websocket address here>
 
 ## Running
 
-You run the [main.go](cmd/websocketserver/main.go) to start listening for mempool TXs and broadcasting them via
+You run [main.go](Documents/gofetch-mempool/cmd/main/main.go) to start listening for mempool TXs and broadcasting them via
 websocket to `localhost:8080/mempooltxs`.
 
 You can then hook up websocat and pipe it to jq by running `websocat ws://localhost:8080/mempooltxs | jq` in your

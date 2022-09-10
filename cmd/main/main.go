@@ -4,7 +4,7 @@ import (
 	"flag"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/gorilla/websocket"
-	"github.com/vanderheijden86/mempoolexplorer/cmd/datacollection"
+	"github.com/vanderheijden86/mempoolexplorer/pkg/datacollection"
 	"log"
 	"net/http"
 )

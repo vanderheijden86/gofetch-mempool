@@ -5,7 +5,7 @@
 *.so
 *.dylib
 /cmd/main
-
+websocketserver
 # Test binary, built with `go test -c`
 *.test
 

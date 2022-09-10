@@ -15,6 +15,8 @@ var addr = flag.String("addr", "localhost:8080", "http service address")
 var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
+	// TODO Make this configurable, for now allow any origin to make requests as we run this locally.
+	CheckOrigin: func(r *http.Request) bool { return true },
 }
 
 var mempoolTxs = make(chan *types.Transaction, 20)

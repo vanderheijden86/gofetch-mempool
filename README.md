@@ -1,10 +1,8 @@
-# Ethereum Mempool Explorer
+# gofetch-mempool
 
 Golang implementation of an ethereum mempool explorer. It uses the go-ethereum `ethclient` and `gethclient` packages
-to connect to an Ethereum node. It connects to an Infura node in this case, but that could just as easily be a
-locally running eth node if you change the configuration in [ethclients.go](cmd/datacollection/ethclients.go).
-It starts a websocket server to publish the full mempool TXs in JSON format for other clients (like a front-end) to
-consume.
+to connect to an Ethereum node. It starts a websocket server to publish the full mempool TXs in JSON format for other
+clients (like a front-end) to consume.
 
 ## Setup
 
